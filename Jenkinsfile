@@ -9,5 +9,12 @@ pipeline {
 		sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=azuredevsecopsprojkey -Dsonar.organization=azuredevsevopsorg -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=363be6d11281420f0cc3ba072d8b88039f970472'
 			}
         } 
+        stage('RunSCAAnalysisUsingSnyk') {
+            steps {		
+				withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
+					sh 'mvn snyk:test -fn'
+				}
+			}
+    }	
   }
 }
